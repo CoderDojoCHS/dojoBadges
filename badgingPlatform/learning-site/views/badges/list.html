@@ -1,0 +1,17 @@
+{% extends 'filter.html' %}
+{% set pageTitle = 'Earn' %}
+{% set bodyClass = 'earn' %}
+{% set navItem = 'badges' %}
+
+{% block content %}
+	<p>The City of Chicago Summer of Learning badges recognize the cool things you do over the summer. When you learn something new, you can earn a badge. As you earn more badges you can do more cool things. When you go back to school in the fall, you can show off all the badges you earned to your teachers, parents, potential employers and friends!</p>
+	{{ super() | safe }}
+{% endblock %}
+
+{% block item_actions %}
+	{{ super() | safe }}
+{% endblock %}
+
+{% block no_data %}
+  No badges found.
+{% endblock %}

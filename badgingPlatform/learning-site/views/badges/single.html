@@ -1,0 +1,72 @@
+{% extends 'badges/layout.html' %}
+{% set bodyClass = 'badge-detail' %}
+
+{% block content %}
+    {% for _ in [0] %}
+    {% set item = badge %}
+    <div class="row">
+        <div class="span4">
+          <div class="featured-badge">
+            {% set hide_details_button = true %}
+            {% include "includes/badge-thumbnail.html" %}
+          </div>
+        </div>
+        <div class="span8">
+            <h3>What is this badge about?</h3>
+            <p class="description">{{ item.description|safe }}</p>
+            <p class="desription">Part of <a href="/explore/{{item.program.shortname}}">{{item.program.name}}</a></p>
+
+            {% if not user or user.type == 'learner' %}
+                <h3>How can you earn it?</h3>
+                <p class="description">{{item.criteria|safe}}</p>
+                <br>
+                <p>
+                    {% if item.tags.indexOf('aestimia') == -1 %}
+                      <strong>Learn more about this badge:</strong>
+                      {% if item.program.contact %}
+                        <a href="mailto:{{item.program.contact}}">{{item.program.contact}}</a>
+                      {% elif item.program.url %}
+                        <a href="{{item.program.url}}" target="blank">{{item.program.url}}</a>
+                      {% elif item.program.phone %}
+                        {{item.program.phone}}
+                      {% endif %}
+                    {% else %}
+                        <a href="{{ item.url }}/apply" class="btn">Apply</a>
+                    {% endif %}
+                </p>
+                <br>
+                {% if (not playlist_ids or playlist_ids.indexOf(item.id) < 0) %}
+                <p>
+                    <form action="/myplaylist" method="POST">
+                        <input type="hidden" name="shortname" value="{{ item.id }}">
+                        <button type="submit" class="btn" title="Add to playlist">Add to your playlist</button>
+                    </form>
+                </p>
+                {% endif %}
+            {% endif %}
+            <hr>
+            <ul class="tags">
+                {% for category in item.categories %}
+                <li class="label">{{category}}</li>
+                {% endfor %}
+                <li class="label">{{item.program.issuer.name}}</li>
+                <li class="label">{{item.type}}</li>
+                <li class="label">{{item.activityType}}</li>
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if relatedBadges and relatedBadges|length > 0 %}
+        <h3><a href="/badges">Similar or Related Badges</a></h3>
+        <p>If you're interested in this badge, you might be interested in these too. These are badges on similar STEAM topics or ones that can take you to the next level.</p>
+        <ul class="thumbnails">
+            {% for relatedBadge in relatedBadges %}
+                <li class="span3">
+                    {% set item = relatedBadge %}
+                    {% include "includes/badge-thumbnail.html" %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

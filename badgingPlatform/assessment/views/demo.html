@@ -1,0 +1,154 @@
+{% extends "layout.html" %}
+{% block head %}
+<link rel="stylesheet" href="/css/api.css">
+<style>
+#js-console {
+  height: 345px;
+  padding: 6px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 10px;
+  line-height: 12px;
+  white-space: pre-wrap;
+  color: gray;
+  background: black;
+  overflow: auto;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#js-console.affix {
+  position: fixed;
+  top: 20px;
+  width: 460px;
+}
+
+#js-console .exec {
+  color: white;
+}
+
+table.querystring-args code,
+table.querystring-args input {
+  color: inherit;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+}
+
+</style>
+{% endblock %}
+{% block title %} - Interactive API Documentation{% endblock %}
+{% block content %}
+<h1 id="title">Aestimia Interactive API Documentation</h1>
+
+<div class="row">
+  <div class="span6">
+
+    <h2>API Secret</h2>
+
+    <p>All of the functionality on the page is just a front-end to the API. Enter your API secret below, or else nothing on this page will work.</p>
+
+    <p><input type="password" id="js-password"></p>
+    <p>
+      <label class="checkbox">
+        <input id="js-show-password" type="checkbox"> Show API secret in console
+      </label>
+    </p>
+
+    <h2>API Operations</h2>
+
+    <p>The documentation below is also available in <a href="/docs">printable form</a>.</p>
+
+    <div class="accordion" id="api-actions">
+      {% for section in sections %}
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#api-actions" href="#{{section.id}}">{{section.title}}</a>
+        </div>
+        <div id="{{section.id}}" class="accordion-body collapse">
+          <div class="accordion-inner">
+            {{section.html|safe}}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+  <div class="span6">
+    <h2>Console</h2>
+    <p>This console shows you what API calls your actions on the left
+      column are making.</p>
+    <div id="js-console"></div>
+  </div>
+</div>
+
+<div id="interactives" style="display: none">
+  <div data-section-id="mentor-list">
+    <button id="js-list-mentors" class="btn">List Mentors</button>        
+  </div>
+  <div data-section-id="mentor-update">
+    <h5>Input</h5>
+
+    <textarea class="input-block-level" rows="4" style="font-family: monospace" id="js-update-mentor-json">{
+  "email": "foo@bar.org",
+  "classifications": ["math"]
+}</textarea>
+
+    <button class="btn btn-primary" id="js-update-mentor">Update Mentor</button>
+  </div>
+  <div data-section-id="submission-create">
+    <h5>Input</h5>
+
+    <ul class="nav nav-tabs" id="submissions">
+      {% for submission in submissions %}
+      <li><a data-toggle="tab" href="#submission-{{ submission.name }}">{{ submission.name }}</a></li>
+      {% endfor %}
+    </ul>
+
+    <div class="tab-content">
+      {% for submission in submissions %}
+      <div class="tab-pane" id="submission-{{ submission.name }}">
+        <form class="js-submission">
+          <textarea autocomplete="off" style="font-family: monospace" rows="30" class="input-block-level" name="json">{{ submission.json }}</textarea>
+          <input class="btn btn-primary" type="submit" value="Create Submission">
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div data-section-id="submission-get">
+    <h5>URL Arguments</h5>
+    
+    <table class="table http route-args">
+      <tr>
+        <th>Argument</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td><code>submissionId</code></td>
+        <td><input type="text" id="js-submission-id"></td>
+      </tr>
+    </table>
+
+    <button id="js-get-submission" class="btn">Get Submission</button>
+  </div>
+  <div data-section-id="submission-list">
+    <h5>Query String Arguments</h5>
+
+    <table class="table http querystring-args">
+      <tr>
+        <th>Argument</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td><code>learner</code></td>
+        <td><input type="text" id="js-learner" placeholder="user@domain.com" value="brian@example.org"></td>
+      </tr>
+    </table>
+
+    <button id="js-list-submissions" class="btn">List Submissions</button>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/js/demo.js"></script>
+{% endblock %}

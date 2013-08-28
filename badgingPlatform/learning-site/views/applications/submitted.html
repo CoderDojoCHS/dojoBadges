@@ -1,0 +1,74 @@
+{% extends 'applications/layout.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css">
+{% endblock %}
+
+{% block content %}
+	{% block notice %}
+		<div class="alert alert-block">
+			{% if user.underage %}
+			<h4>You applied for the {{badge.name}} Badge. Awesome work!</h4>
+			<p>We need to be sure your parent or guardian is OK with this so we sent them an email. As soon as they agree, we'll send your work to a mentor who will decide if you should earn the badge.</p>
+			{% else %}
+			<p>You have successfully applied for the {{badge.name}} badge. Your application has been sent to a mentor who will review it and get back to you.</p>
+			{% endif %}
+		</div>
+	{% endblock %}
+	<div class="row-fluid">
+		<div class="span4">
+			<a href="{{ badge.url }}"><img src="{{ badge.image }}"></a>
+		</div>
+		<div class="span8">
+			<div id="application-review">
+				{% block notes %}
+				{% endblock %}
+				<div class="well">
+					<h3>Your application</h3>
+					{% if application.description %}
+						<pre>{{ application.description }}</pre>
+					{% endif %}
+					<ul id="evidence" class="thumbnails"{% if evidence.length == 0 %} style="display: none;"{% endif %}>
+						{% for item in evidence %}
+							<li class="span2 item item-{{ item.mediaType.split('/')[0] }}">
+								{% if item.saved %}
+									<a href="{{ item.getLocationUrl() }}" class="thumbnail" data-fancybox-type="{{ item.mediaType.split('/')[0] }}" data-fancybox-group="gallery" title="{{ item.original }}">
+										<img src="{{ item.getThumbnailUrl() }}" width="150" height="150">
+									</a>
+								{% else %}
+									<span class="thumbnail processing" title="{{ item.original }}">
+										<img src="{{ item.getThumbnailUrl() }}" width="150" height="150">
+									</span>
+								{% endif %}
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% if similar %}
+		<div class="row-fluid">
+			<div class="span12">
+				<h3>Here are other badges that might interest you:</h3>
+				{% for item in similar %}
+					<div class="span3">
+						{% include "includes/badge-thumbnail.html" %}
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}
+
+{% block finally %}
+	<script src="/media/js/jquery.fancybox.js"></script>
+	<script>
+		(function ($) {
+			$('#evidence').find('a.thumbnail').fancybox({
+				openEffect	: 'none',
+				closeEffect	: 'none'
+			});
+		})(jQuery);
+	</script>
+{% endblock %}

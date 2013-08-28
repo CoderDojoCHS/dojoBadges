@@ -1,0 +1,26 @@
+{% extends "public/layout.html" %}
+{% block title %}All Badges{% endblock %}
+{% block body %}
+  <h1>All Badges</h1>
+  {% for badge in badges %}
+  <div class="row">
+    <div class="span3">
+      <img src="{{ badge.relativeUrl('image')}}">
+    </div>
+    <div class="span9">
+      <h4 class="media-heading">{{ badge.name }}</h4>
+      <dl>
+        <dt>Description:</dt>
+        <dd>
+          {% if badge.criteria.content %}
+            {{ badge.criteria.content | markdown }}
+          {% else %}
+            {{ badge.description | stupidSafe }}
+          {% endif %}
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <br>
+  {% endfor %}
+{% endblock %}

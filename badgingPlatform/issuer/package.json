@@ -1,0 +1,49 @@
+{
+  "name": "openbadger",
+  "description": "Makin' badges",
+  "version": "2.0.36-25",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "start-with-logs": "node app.js",
+    "test": "bin/test.js"
+  },
+  "dependencies": {
+    "express": "~3.0.1",
+    "redis": "0.8.1",
+    "request": "2.11.4",
+    "habitat": "0.4.2",
+    "connect-redis": "1.4.4",
+    "mongoose": "3.6.7",
+    "async": "0.1.22",
+    "up": "0.2.2",
+    "connect-flash": "0.1.0",
+    "jwt-simple": "0.1.0",
+    "sandwich": "~0.1.1",
+    "optimist": "~0.3.5",
+    "iterator-stream": "~0.4.0",
+    "markdown": "~0.4.0",
+    "underscore": "~1.4.4",
+    "connect-memcached": "0.0.3",
+    "nunjucks": "~0.1.8a",
+    "newrelic": "~0.9.19",
+    "dataurl": "~0.1.0",
+    "bunyan": "~0.21.3",
+    "gelf-stream": "~0.2.2",
+    "knox": "~0.8.3",
+    "mime": "~1.2.5",
+    "colors": "0.6.0"
+  },
+  "devDependencies": {
+    "tap": "~0.4.1",
+    "sinon": "1.7.2",
+    "supertest": "0.6.0",
+    "prompt": "0.2.9",
+    "mime": "~1.2.5"
+  },
+  "engines": {
+    "node": "~0.8.0",
+    "npm": "~1.1.0"
+  },
+  "subdomain": "ninja"
+}

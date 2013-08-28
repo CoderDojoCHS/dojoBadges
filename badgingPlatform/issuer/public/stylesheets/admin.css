@@ -1,0 +1,69 @@
+.show-badge .badge-image {
+  width: 100px;
+  float: left;
+  margin-right: 14px;
+}
+
+.config-form input[name="secret"] {
+  width: 600px;
+}
+
+.logout-form {
+  display: none;
+}
+
+.remove-form input[type="submit"],
+.remove-form button {
+  display: none;
+}
+
+.remove-form.show-actions input[type="submit"],
+.remove-form.show-actions button {
+  display: inline;
+}
+
+.remove-form.show-actions .remove-link {
+  display: none;
+}
+
+.badge-name, .behavior-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.claim-action { display: inline }
+
+.behavior-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.behavior-list li{
+  margin: 15px 0;
+}
+.behavior-list {
+  margin-left: 3px;
+}
+
+.show-badge .badge-criteria {
+  background: #fff;
+  border: #eee;
+  resize: none;
+  height: 133px;
+}
+
+.show-badge dl {
+  overflow: hidden;
+}
+
+.show-badge dt, .show-badge dd {
+  margin-bottom: 4px;
+}
+
+textarea {
+  width: 420px;
+}
+
+span.help-block {
+  width: 420px;
+}

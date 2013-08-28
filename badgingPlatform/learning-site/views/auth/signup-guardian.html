@@ -1,0 +1,46 @@
+{% extends 'auth/layout.html' %}
+{% set bodyClass = 'parent-sign-up' %}
+{% set pageTitle = 'Parents & Guardians' %}
+{% set navItem = 'sign-up' %}
+
+{% block content %}
+	<form class="form-horizontal row-fluid" method="post">
+		<p class="lead">Create an account below to confirm and activate your child's Chicago Summer of Learning account and start the learning and earning!</p>
+		<input type="hidden" name="_csrf" value="{{ csrfToken }}">
+		<fieldset class="span12 well">
+			<div class="control-group">
+				<label class="control-label" for="input-email">Email</label>
+				<div class="controls">
+					{% if auto_email %}
+						<input type="email" readonly="readonly" id="input-email" value="{{ auto_email }}">
+					{% else %}
+						<input type="email" id="input-email" name="email" placeholder="e.g. user@example.com" required="required">
+					{% endif %}
+					<span class="help-block"><strong><a href="/privacy">Please see our privacy policy.</a></strong></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="input-password">Password</label>
+				<div class="controls">
+					<input type="password" id="input-password" name="password" required="required">
+					<div class="alert help-block">Make sure to write your password somewhere so you won't forget it! You'll need it to log in again later.</div>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<p><button type="submit" class="btn">Sign Up</button></p>
+					<small>Already have an account? <a href="/login">Log in</a>.</small>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+{% endblock %}
+
+{% block finally %}
+<script>
+	(function() {
+		{% include 'includes/password-test.js' %}
+		setupPasswordStrengthTest();
+	})();
+</script>
+{% endblock %}

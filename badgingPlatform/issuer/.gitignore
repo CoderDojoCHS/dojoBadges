@@ -1,0 +1,17 @@
+.idea/
+*~
+/bin/config.sh
+/bin/heroku.sh
+db
+/bin/test-config.sh
+/wiki/
+/dump.rdb
+generated-codes
+.tern-port
+/notes.org
+npm-debug.log
+config.env
+.DS_Store
+public/.DS_Store
+/s3-fake-storage
+/surgery

@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %} - History{% endblock %}
+{% block content %}
+<h1 id="title">Review History</h1>
+{% if totalPages %}
+  <p>These submissions have already been reviewed.</p>
+  {% include "submission-list.html" %}
+{% else %}
+  <p>There is no submission history to view.</p>
+{% endif %}
+{% endblock %}

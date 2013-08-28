@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% set bodyClass = 'challenges' %}
+{% set pageTitle = 'Level Up' %}
+
+{% block content %}
+<style type="text/css">
+	p.b {
+		margin:18px 0;
+	}
+</style>
+<div class="row text-left">
+	<p class="b">
+		Try out citywide challenges where you can use your new skills and build cool stuff. You can architect the future Chicago skyline, design your first fashion line and make a documentary film about your neighborhood!
+	</p>
+	<h3>
+		How to unlock challenges:
+	</h3>
+	<img width="540" height="169" src="/media/img/levelup-1.png">
+	<p class="b">
+		First you earn badges from various programs, self-paced online activities and games.
+	</p>
+	<img width="724" height="169" src="/media/img/levelup-2.png">
+	<p class="b">
+		By earning a combination of these badges (either 3 skill badges -or- 1 achievement badge + 1 skill badge), you are awarded the city-level badges for work in science, technology, engineering, art and math. These are called STEAM fields.
+	</p>
+	<a style="text-decoration:none;color:#000;" href="http://www.explorechi.org/l/pathways/" target="_blank">
+		<img width="573" height="169" src="/media/img/levelup-3.png">
+	</a>
+	<p>
+		These STEAM badges unlock access to citywide challenges. You can choose to demonstrate your new skills and build cool things for Chicago while earning more badges.
+	</p>
+</div>
+
+{% endblock %}

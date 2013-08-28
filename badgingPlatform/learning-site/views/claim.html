@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% set pageTitle = 'Claiming Badges' %}
+{% set bodyClass = 'claim' %}
+{% set navItem = 'claim' %}
+
+{% block content %}
+  {% if badge %}
+    <div class="row-fluid">
+      <div class="span4">
+        <img src="{{ badge.image }}">
+      </div>
+      <div class="span8">
+        <h3>{{ badge.name }}</h3>
+        <p class="description">{{ badge.description }}</p>
+        {% if code %}
+          <br>
+          <form method="post" class="form-horizontal text-center well">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" id="input-code" name="code" value="{{ code }}">
+            <button type="submit" class="btn btn-large">Claim this badge</button>
+          </form>
+        {% else %}
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    <p>To claim the badge you've earned, enter the "claim code" written on the paper badge you received from your teacher, counselor or mentor.</p>
+    <p>Then hit the "Claim This Badge" button on your screen. Once you do this, the badge will be added to your My Badges page and you can throw the piece of paper away (or, better yet, recycle it!).</p>
+
+    <h3>Already have a claim code?</h3>
+    <form method="get" class="form-horizontal row-fluid">
+      <fieldset class="span12 well">
+        <div class="control-group">
+          <label class="control-label" for="input-code">Claim Code</label>
+          <div class="controls">
+            <input type="text" id="input-code" name="code" placeholder="e.g. a4d1-d12b-54rf-ggcd" value="{{ code }}">
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn">Claim this Badge</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+{% block title %} - Submission {{ submission._id }}{% endblock %}
+{% block content %}
+<h1 id="title">
+  Submission From
+  {% if submission.isLearnerUnderage() %}
+  An Underage Learner
+  {% else %}
+  {{ submission.learner }}
+  {% endif %}
+</h1>
+<p class="muted">Created {{ submission.creationDate|timeago }}</p>
+<div class="row">
+  <div class="span4 offset4">
+    {% include "badge.html" %}
+    <hr>
+    <p class="verbatim">{{ submission.achievement.description }}</p>
+  </div>
+</div>
+<h2>Evidence</h2>
+<ul class="thumbnails">
+{% for evitem in submission.evidence %}
+<li class="span4">
+  <div class="thumbnail">
+    {% if evitem.mediaType == "image" %}
+      <a href="{{ evitem.url }}">
+        <img src="{{ evitem.url }}" alt="evidence item #{{loop.index}}">
+      </a>
+    {% else %}
+      <a href="{{ evitem.url }}">{{ evitem.url }}</a>
+    {% endif %}
+    <h3>Evidence #{{loop.index}}</h3>
+    {% if evitem.reflection %}
+      <p class="verbatim">{{ evitem.reflection }}</p>
+    {% else %}
+      <p class="muted">No reflection provided for this evidence.</p>
+    {% endif %}
+  </div>
+</li>
+{% endfor %}
+</ul>
+<form method="POST">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+{% if submission.isReviewed() %}
+  {% if submission.flagged %}
+  <div class="alert alert-error">
+    <strong><i class="icon-flag"></i> This submission has been reported for inappropriate content.</strong>
+    <button type="submit" name="action" value="unflag" class="btn btn-mini pull-right"> Un-report</button>
+  </div>
+  {% else %}
+  <div class="well well-small">
+    <h2>Review</h2>
+    {% set review = submission.latestReview() %}
+    <p>This submission was
+      {% if submission.isAwarded() %}
+      awarded
+      {% else %}
+      rejected
+      {% endif %}
+      by <strong>{{ review.author }}</strong>  
+      {{ review.date|timeago }}.</p>
+    <h3>Rubric</h3>
+    <ul style="list-style-type: none">
+    {% for rubitem in submission.rubric.items %}
+      <li>
+      {# TODO: This is nasty, we should make a helper method
+         on the submission model for this. #}
+      {% if review.satisfiedRubrics.indexOf(loop.index0) == -1 %}
+      <span style="opacity: 0.5">
+        <i class="icon-remove"></i> {{ rubitem.text }}
+      </span>
+      {% else %}
+      <i class="icon-ok"></i> {{ rubitem.text }}
+      {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+    <h3>Response</h3>
+    <blockquote>
+      <p>{{ review.response }}</p>
+      <small>{{ review.author }}</small>
+    </blockquote>
+  </div>
+  {% endif %}
+{% else %}
+  {% set assignee = submission.getAssignee() %}
+  {% if assignee == email %}
+  <a name="assess"></a>
+  <div class="alert">
+    You have until <strong>{{ submission.assignedTo.expiry|timeago }}</strong> to assess this submission. After that point, other mentors will have the opportunity to assess it.
+  </div>
+  <h2>Rubric</h2>
+  <p>All required items must be checked for the learner to be awarded.</p>
+  {% for rubitem in submission.rubric.items %}
+    <label class="checkbox">
+      <input type="checkbox" name="rubric_{{loop.index0}}"
+             {% if rubitem.required %}data-required{% endif %}>
+      {% if rubitem.required %}
+      <strong>{{ rubitem.text }} (required)</strong>
+      {% else %}
+      {{ rubitem.text }}
+      {% endif %}
+    </label>
+  {% endfor %}
+  <h2>Response</h2>
+  {% if submission.isLearnerUnderage() %}
+    <select class="input-block-level" name="response" autocomplete="off">
+      <option value="" selected>Select a response&hellip;</option>
+      {% for response in submission.cannedResponses %}
+      <option value="{{ response }}">{{ response }}</option>
+      {% endfor %}
+    </select>
+  {% else %}
+    <p>Please help the learner improve their work by giving them feedback
+     about what worked and what didn't. If you have any other suggestions,
+     feel free to add them.</p>
+    <textarea class="input-block-level" name="response"></textarea>
+  {% endif %}
+  <button id="js-assess" type="submit" name="action" value="assess" class="btn" data-accept-tooltip="All required rubric items are satisfied, so the learner will be awarded." data-reject-tooltip="Not all required rubric items are satisfied, so the submission will be rejected."><i></i> Submit Assessment</button>
+  <button type="submit" name="action" value="unassign" class="btn">Cancel Assessment</button>
+  <button type="submit" name="action" value="flag" class="btn"><i class="icon-flag"></i> Report</button>
+  {% elif assignee %}
+  <p>This submission is currently being reviewed by {{ assignee }}.</p>
+  {% else %}
+  <button type="submit" name="action" value="assign" class="btn btn-large btn-primary">Begin Assessment</button>
+  {% endif %}
+{% endif %}
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/submission-detail.js"></script>
+{% endblock %}

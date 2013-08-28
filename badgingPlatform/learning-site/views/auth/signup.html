@@ -1,0 +1,104 @@
+{% extends 'auth/layout.html' %}
+{% set bodyClass = 'sign-up' %}
+{% set pageTitle = 'Sign Up &amp; Start Exploring' %}
+{% set navItem = 'sign-up' %}
+{% set months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] %}
+
+{% block content %}
+	<form class="form-horizontal row-fluid" method="post">
+		<p class="lead">Explore badges you can earn and level up for citywide challenges. Create an account to get started!</p>
+		<input type="hidden" name="_csrf" value="{{ csrfToken }}">
+		<fieldset class="span12 well">
+			<div class="control-group {{ _fields.username.state }}">
+				<label class="control-label" for="input-username">Username</label>
+				<div class="controls">
+					<input type="text" id="input-username" name="username" value="{{ username }}" required="required" placeholder="e.g. {{ example }}">
+					{% if _fields.username.message -%}
+						<span class="help-block message"><strong><em>{{ _fields.username.message }}</em></strong></span>
+					{%- else -%}
+						<span class="help-block"><strong>Please don't use your real name.</strong></span>
+					{%- endif %}
+				</div>
+			</div>
+			<div class="control-group {{ _fields.birthday.state }}">
+				<label class="control-label" for="input-birthday-month">Birthday</label>
+				<div class="controls">
+					<select id="input-birthday-month" name="birthday_month" class="input-medium" required="required">
+						<option></option>
+						{% for month in months %}
+							<option value="{{ loop.index }}"{% if birthday_month == loop.index %} selected="selected"{% endif %}>{{ month }}</option>
+						{% endfor %}
+					</select>
+					<select id="input-birthday-day" name="birthday_day" class="input-mini" required="required">
+						<option></option>
+						{% for day in range(1, 32) %}
+							<option{% if birthday_day == day %} selected="selected"{% endif %}>{{ day }}</option>
+						{% endfor %}
+					</select>
+					<select id="input-birthday-year" name="birthday_year" class="input-small" required="required">
+						<option></option>
+						{% for year in range(2012, 1979, (-1)) %}
+							<option {% if birthday_year == year %} selected="selected"{% endif %}>{{ year }}</option>
+						{% endfor %}
+					</select>
+					{% if _fields.birthday.message -%}
+						<span class="help-block message"><strong><em>{{ _fields.birthday.message }}</em></strong></span>
+					{%- endif %}
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<p><button type="submit" class="btn">Sign Up</button></p>
+					<small>Already have an account? <a href="/login">Log in</a>.</small><br>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+{% endblock %}
+
+{% block finally %}
+<script>
+	(function($) {
+		var $input = $(document.getElementById('input-username')),
+		    $container = $input.parent(),
+		    $help = $container.find('.help-block'),
+		    $wrapper = $(document.createElement('div')),
+		    $button = $(document.createElement('button')),
+		    $refresh = $(document.createElement('i')),
+		    generating = false;
+
+		$wrapper
+		    .addClass('input-append')
+		    .insertBefore($input);
+
+		$refresh.addClass('icon-refresh');
+
+		$button
+		    .addClass('btn')
+		    .attr({type: 'button', title: 'Create a username'})
+		    .append($refresh);
+
+		$button.click(function() {
+			if (generating) return;
+			generating = true;
+
+			$.ajax('/signup/generate_username', {
+				success: function (username) {
+					$input.val(username);
+				},
+				complete: function () {
+					generating = false;
+					$input.focus().select();
+				}
+			});
+		});
+
+		$wrapper
+		    .append($input)
+		    .append($button);
+
+		if (!$help.hasClass('message'))
+			$help.html('Type in a name, or click the button<br>to have one generated for you.<br>' + $help.html());
+	})(jQuery);
+</script>
+{% endblock %}

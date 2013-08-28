@@ -1,0 +1,15 @@
+{% extends "public/layout.html" %}
+{% block title %}{{ badge.name }}{% endblock %}
+{% block body %}
+  <h1>{{ badge.name }}</h1>
+  <dl>
+    <dt>Description:</dt>
+    <dd>
+      {% if badge.criteria.content %}
+        {{ badge.criteria.content | markdown }}
+      {% else %}
+        {{ badge.description | stupidSafe }}
+      {% endif %}
+    </dd>
+  </dl>
+{% endblock %}

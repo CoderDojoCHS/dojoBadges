@@ -1,0 +1,7 @@
+{% extends 'filter.html' %}
+{% set navItem = 'learn' %}
+{% if not pageTitle %}{% set pageTitle = 'Learn' %}{% endif %}
+
+{% block item_actions %}
+	{{ super() | safe }}
+{% endblock %}

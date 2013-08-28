@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+{% if not items %}{% set items = [] %}{% endif %}
+
+{% block content %}
+	{% block filter %}
+    {% if filters %}
+			<div class="navbar filter">
+				<form class="navbar-inner navbar-form form-inline text-center" method="get">
+					{% for filter in filters %}
+					    <div class="selectWrapper{% if not filter.options %} text{% endif %}">
+    						<label for="filter-{{ filter.name }}" class="filter-icon filter-{{ filter.name }}">{{ filter.label }}</label>
+    						{% if filter.options %}
+    							<select id="filter-{{ filter.name }}" name="{{ filter.name }}" class="input-small{% if filter.class %} {{ filter.class }}{% endif %}">
+    								<option value="">{{ filter.label }}</option>
+                    {% if filter.is_grouped %}
+                      {% for label, options in filter.options %}
+    										<optgroup label="{{ label }}">
+    											{% for value, label in options %}
+    												<option value="{{ value }}"{% if filter.value == value %} selected="selected"{% endif %}>{{ label }}</option>
+    											{% endfor %}
+    										</optgroup>
+    									{% endfor %}
+                    {% else %}
+                      {% for item in filter.options %}
+    										<option value="{{ item.value }}"{% if filter.value == item.value %} selected="selected"{% endif %}>{{ item.label }}</option>
+    									{% endfor %}
+    								{% endif %}
+    							</select>
+    						{% else %}
+    							<input type="{{ filter.type | default('text') }}" id="filter-{{ filter.name }}" name="{{ filter.name }}" class="input-small{% if filter.class %} {{ filter.class }}{% endif %}"{% if filter.value %} value="{{ filter.value }}"{% endif %}>
+    						{% endif %}
+    					</div>
+					{% endfor %}
+					<input type="submit" value="Update" class="btn">
+				</form>
+			</div>
+		{% endif %}
+	{% endblock %}
+	{% block list_wrapper %}
+		{% if items.length %}
+			<ul class="thumbnails">
+				{% block list %}
+					{% for item in items %}
+						{% block item %}
+							<li class="span3">
+								{% if item.template %}
+									{% include item.template %}
+								{% elif template %}
+									{% include template %}
+								{% else %}
+									{# this is hacky! #}
+									{% if itemType == 'program' or itemType == 'org' %}
+										{% include "includes/item-thumbnail.html" %}
+									{% else %}
+										{% include "includes/badge-thumbnail.html" %}
+									{% endif %}
+								{% endif %}
+							{% endblock %}
+						</li>
+					{% endfor %}
+				{% endblock %}
+			</ul>
+		{% else %}
+			{% block no_data %}
+				No data found.
+			{% endblock %}
+		{% endif %}
+	{% endblock %}
+	{% block pagination %}
+		{% if pages > 1 %}
+			<nav class="pagination pagination-centered">
+				<ul>
+					{{ paginate(pages, page) | safe }}
+				</ul>
+			</nav>
+		{% endif %}
+	{% endblock %}
+{% endblock %}

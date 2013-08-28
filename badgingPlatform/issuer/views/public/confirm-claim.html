@@ -1,0 +1,30 @@
+{% extends "public/layout.html" %}
+{% block title %}{{ badge.name }}{% endblock %}
+{% block body %}
+  <h1>{{ badge.name }}</h1>
+
+  <dl>
+    <dt>Description:</dt>
+    <dd>
+      {% if badge.criteria.content %}
+        {{ badge.criteria.content | markdown }}
+      {% else %}
+        {{ badge.description | stupidSafe }}
+      {% endif %}
+    </dd>
+  </dl>
+
+  <hr>
+
+  <form method="post" action="/claim/confirm" class="confirm-form js-confirm-form">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="code" value="{{ code }}">
+    <input tabindex="1" type="email" name="email" placeholder="you@example.org" class="input js-email-input" required>
+    <br>
+    <input tabindex="2" type="submit" value="Claim your badge" class="btn btn-primary js-submit-button">
+  </form>
+{% endblock %}
+{% block scripts %}
+<script src="https://beta.openbadges.org/issuer.js"></script>
+<script src="/js/claim-award.js"></script>
+{% endblock %}

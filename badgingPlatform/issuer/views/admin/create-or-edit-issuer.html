@@ -1,0 +1,104 @@
+{% extends "admin/base.html" %}
+
+{% block main %}
+<form method="post" action="?" enctype="multipart/form-data">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <legend>
+    <h1>
+    {% if editing %}
+      Edit Issuer: {{ issuer.name }}
+      <p>
+        <image
+           src="{{ issuer.image | dataurl('image/png') }}"
+           style="max-height:200px">
+      </p>
+    {% else %}
+      New Issuer
+    {% endif %}
+      </h1>
+  </legend>
+
+  <div>
+    <label for="name">Name</label>
+    <input
+       id="name"
+       type="text"
+       name="name"
+       value="{{ issuer.name | default('') }}"
+       placeholder="Issuing Organization"
+       required>
+  </div>
+
+  <div>
+    <label for="contact">Contact (optional)</label>
+    <input
+       id="contact"
+       type="email"
+       name="contact"
+       value="{{ issuer.contact | default('') }}"
+       placeholder="admin@example.org">
+  </div>
+
+  <div>
+    <label for="url">URL (optional)</label>
+    <input
+       id="url"
+       type="url"
+       name="url"
+       value="{{ issuer.url | default('') }}"
+       placeholder="http://example.org">
+  </div>
+
+  <div>
+    <label for="description">Description (optional)</label>
+    <input
+       id="description"
+       type="text"
+       name="description"
+       value="{{ issuer.description | default('') }}"
+       placeholder="A short description">
+  </div>
+
+  <div>
+    <label for="accessList">Access List (optional)</label>
+    <textarea
+       id="accessList"
+       type="text"
+       name="accessList"
+       placeholder="user@example.org">{{ issuer.accessList | list('email', '\n') }}</textarea>
+    <span class="help-block">
+      List of users who can issue badges on behalf of this
+      organization. Separate each email address with a newline.
+    </span>
+  </div>
+
+  <div>
+    <label for="image">New Image (optional)</label>
+    <input
+       id="image"
+       type="file"
+       name="image"
+       accept="image/png">
+  </div>
+{% if editing %}
+  <hr>
+  <div>
+    <h2>Programs</h2>
+    <a href="/admin/issuer/{{ issuer.id}}/program">Add a New Program</a>
+    <ul>
+      {% for program in issuer.programs %}
+      <li>
+        <a href="/admin/program/{{ program.id }}">{{ program.name }}</a>
+        <a class="js-delete-item" href="/admin/program/{{ program.id }}" title="delete program '{{ program.name }}'"><i class="icon-trash"></i></a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+  <hr>
+  <div>
+    <input class="btn btn-primary" type="submit" value="Save and Continue">
+  </div>
+</form>
+
+{% endblock %}

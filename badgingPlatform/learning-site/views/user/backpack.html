@@ -1,0 +1,83 @@
+{% extends 'filter.html' %}
+{% set pageTitle = 'My Badges' %}
+{% set bodyClass = 'mybadges' %}
+{% set navItem = 'backpack' %}
+
+{% block pageTitleWrapper %}{{ super()|safe }} <p>See all the badges you have earned. Keep it up!</p>{% endblock %}
+
+{% block list %}
+  {{ super() | safe }}
+  <li class="span3">
+  <figure class="thumbnail">
+    <a href="/claim"><img src="/media/img/add-badge.png"></a>
+    <figcaption class="caption">
+      <p>Claim another badge!</p>
+      <p class="text-right"><a href="/claim" class="btn">+1</a></p>
+    </figcaption>
+  </figure>
+  </li>
+{% endblock %}
+
+{% block modal %}
+  <!-- Modal -->
+  <div id="trashModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Are you sure you want to delete this badge?</h3>
+    </div>
+    <div class="modal-body">
+      <a href="#" class="btn btn-block">Cancel</a>
+      <a href="#" class="btn btn-block">Yes</a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block no_data %}
+<p>Welcome {{ user.displayName }}! It doesn't look like you've earned any Chicago Summer of Learning badges yet. Have no fear! You can check out cool projects in science, technology, engineering, art and math now on the <a href="/earn">Earn page</a>.<p>
+{% endblock %}
+
+{% block finally %}
+  <script src="//backpack.openbadges.org/issuer.js"></script>
+  <script>
+
+    function popup (name, opts){
+      var optStrs = [];
+      for (prop in opts) {
+        optStrs.push(prop + '=' + opts[prop]);
+      }
+      var optStr = optStrs.join(',');
+      return function() {
+        var url = $(this).attr('href');
+        var popup = window.open(url, name, optStr);
+        if (window.focus) popup.focus();
+        return false;
+      };
+    }
+
+    $(document).ready(function(){
+
+      $('.js-moz-backpack').click(function(){
+        var url = $(this).attr('data-assertion-url');
+        OpenBadges.issue_no_modal([url]);
+        return false;
+      });
+
+      $('.js-badge-state').each(function(){
+        var container = this;
+        $('form', container).submit(function(){
+          var url = $(this).attr('action');
+          $.post(url).done(function() {
+            $(container).children().toggle();
+          }).fail(function() {
+            alert('Badge update failed');
+          });
+          return false;
+        });
+      });
+
+      $('.js-twitter-share').click(popup('twitter', { width: 550, height: 450 }));
+      $('.js-facebook-share').click(popup('facebook', { width: 626, height: 436 }));
+
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'programs/layout.html' %}
+{% set pageTitle = program.name %}
+
+{% block content %}
+    <div class="row">
+        <div class="span4">
+          <figure class="program-thumbnail thumbnail">
+            <img src="{% if program.imageUrl %}http://ninja.jit.su{{ program.imageUrl }}{% else %}{{program.issuer.imageUrl}}{% endif %}">
+          </figure>
+        </div>
+        <div class="span8">
+            <p><strong>From
+              {% if program.issuer.url %}
+                <a href="{{program.issuer.url}}" target="blank">{{program.issuer.name}}</a>
+              {% else %}
+                {{program.issuer.name}}
+              {% endif %}
+            .</strong></p>
+            {% if program.description %}
+                <p class="description">{{program.description|safe}}</p>
+                {% if program.contact %}
+                  <p class="description">Email us at <a href="mailto:{{program.contact}}">{{program.contact}}</a> to sign up</p>
+                {% elif program.url %}
+                  <p class="description">Check us out at <a href="{{program.url}}" target="blank">{{program.url}}</a> to learn more</p>
+                {% elif program.phone %}
+                  <p class="description">For more information, call {{program.phone}}</p>
+                {% endif %}
+            {% endif %}
+            <p class="text-right"></p>
+        </div>
+    </div>
+    <h3>Badges You Can Earn through this Program</h3>
+    <ul class="thumbnails">
+        {% for shortname,badge in program.earnableBadges %}
+        <li class="span3">
+            {% set item = badge %}
+            {% set url = "/earn/" + shortname %}
+            {% include "includes/badge-thumbnail.html" %}
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "admin/base.html" %}
+
+{% block page %}
+  show-badge
+{% endblock %}
+
+{% block header %}
+<script src="/js/admin.js"></script>
+{% endblock %}
+
+{% block main %}
+<div class="show-badge row">
+  <div class="span8">
+    <h2>{{ badge.name }} (<a href="/admin/badge/{{ badge.shortname }}/edit">Edit</a>)</h2>
+    {% if badge.doNotList %}
+      <p>This badge will not be listed in API calls</p>
+    {% endif %}
+
+    {% if badge.image %}
+      <img class="badge-image" src="{{ badge.imageDataURI() }}">
+    {% endif %}
+    <dl>
+      <dt>Program</dt>
+      <dd>
+        {% if badge.program %}
+          {{ badge.program.issuer.name | e }}: {{ badge.program.name | e }}
+        {% else %}
+          <em>No program</em>
+        {% endif %}
+      </dd>
+
+      <dt>Shortname</dt>
+      <dd><code>{{ badge.shortname }}</code></dd>
+
+      <dt>Description</dt>
+      <dd>{{ badge.description | stupidSafe }}</dd>
+
+      <dt>Tags</dt>
+      <dd>
+        {% for tag in badge.tags %}
+        <code>{{ tag | e }}</code>
+        {% endfor %}
+      </dd>
+
+      <br style="clear: both">
+      <dt>Criteria (<a href="/badge/criteria/{{ badge.shortname }}">Preview</a>)</dt>
+      <dd><textarea class="badge-criteria" disabled>{{ badge.criteria.content }}</textarea></dd>
+
+      {% set rubricItems = badge.getRubricItems() %}
+      {% if rubricItems.length %}
+      <dt>Rubric (parsed from criteria)<dt>
+      <dd>
+        <ul>
+          {% for item in rubricItems %}
+          {% if item.required %}
+            <li>{{ item.text | stupidSafe }} (required)</li>
+          {% else %}
+            <li class="muted">{{ item.text | stupidSafe }}</li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </dd>
+      {% endif %}
+    </dl>
+
+  </div><!--end trigger list span-->
+</div><!--end row 1-->
+
+{% endblock %}

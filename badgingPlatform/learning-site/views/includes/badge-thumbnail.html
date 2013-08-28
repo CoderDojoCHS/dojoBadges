@@ -1,0 +1,76 @@
+{# A badge in a list or grid context.
+
+Context variables from including template:
+
+ - item (required)
+ - url (optional)
+#}
+
+{# itemUrl simplifies getting the URL for the badge: it can be set in the
+parent template overriding the badge (or in some cases supplying it if it
+doesn't have a URL #}
+{% macro itemUrl(url, item) %}
+{% if url %}
+	{{ url }}
+{% else %}
+	{{ item.url }}
+{% endif %}
+{% endmacro %}
+<figure class="thumbnail{% if application %} state-{{ item.state }}{% endif %}">
+	{% if not application %}
+		<div class="playlist-bar text-center{% if playlist_ids and playlist_ids.indexOf(item.id) >= 0 %} in{% endif %}">
+			{% if not playlist_ids or playlist_ids.indexOf(item.id) < 0 %}
+				{% include "includes/add-to-playlist-btn.html" %}
+			{% else %}
+				<p>In Playlist</p>
+			{% endif %}
+		</div>
+	{% endif %}
+	<a href="{{ itemUrl(url, item) }}">
+		<div class="ie-fix">
+			{% set src = item.imageUrl | default(item.image) %}
+			<img src="http://ninja.jit.su{{ src }}" {% if not src %}class="no-src"{% endif %}>
+		</div>
+	</a>
+	<figcaption class="caption">
+		<p>
+			{% if item.name %}
+				{{ item.name | truncate(42, true, "…") }}
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</p>
+		{% if application %}
+			<p class="state">{{ item.getStateDescription() }}</p>
+	        {% block item_actions_wrapper %}
+	          <p class="text-right">
+	            {% block item_actions %}
+	              <a href="{{ item.url }}" class="btn">Details</a>
+	            {% endblock %}
+	          </p>
+	        {% endblock %}
+		{% endif %}
+		{% if not hide_badge_actions %}
+			<div class="item-actions row-fluid">
+				<div class="span3">
+					{% if playlist_ids and playlist_ids.indexOf(item.id) >= 0 %}
+					<form action="/myplaylist" method="POST" class="playlist-remove">
+						<input type="hidden" name="_method" value="DELETE">
+						<input type="hidden" name="shortname" value="{{ item.id }}">
+						<button class="btn"><i class="icon-trash"></i></button>
+					</form>
+					{% endif %}
+				</div>
+				<div class="span9">
+					{% if not hide_details_button %}
+					<p class="pull-right">
+						{% block buttons_right %}
+							<a href="{{ itemUrl(url, item) }}" class="btn">Details</a>
+						{% endblock %}
+					</p>
+					{% endif %}
+				</div>
+			</div>
+		{% endif %}
+	</figcaption>
+</figure>

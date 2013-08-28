@@ -1,0 +1,19 @@
+{% extends 'filter.html' %}
+{% set pageTitle = 'Explore' %}
+{% set bodyClass = 'explore' %}
+{% set navItem = 'learn' %}
+{% set itemType = 'program' %}
+
+{% block content %}
+	<p>There are so many fun things to do this summer! You can try programs run by local organizations like parks and museums. You can also make things like websites and videos online at your own pace.</p>
+	<p>Use the filters below to find projects that interest you. Then click on the Details button to find out how to get started soon.</p>
+	{{ super() | safe }}
+{% endblock %}
+
+{% block item_actions %}
+	{{ super() | safe }}
+{% endblock %}
+
+{% block no_data %}
+  No programs or activities found.
+{% endblock %}
