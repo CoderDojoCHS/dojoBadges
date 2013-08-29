@@ -36,19 +36,19 @@ The badges will have assertions or acceptance criteria in order to be awarded.
 ### Skill Based
 
 HTML
-    1. White Belt
+   
+1. #### White Belt
     >
     > This is the introductory belt and marks the introduction of HTML and a basic understanding of it.
-    >
+    >    
     > This badge will be awarded based on the following assertions:
-    > - Understand what HTML is used for and why it is important
-    > - Able to create simple tags and manipulate content on a page based on a tag.
-    > - Understand the relationship of CSS with HTML
-    > - Should be able to create an HTML document with valid markup
+    > -  Understand what HTML is used for and why it is important
+    > -  Able to create simple tags and manipulate content on a page based on a tag.
+    > -  Understand the relationship of CSS with HTML
+    > -  Should be able to create an HTML document with valid markup
 
-    ... more belts here
 
-    2. Black Belt
+2. #### Black Belt
     >
     > This is the highest HTML Badge you can earn without a challenge from a Master or Mentor
     >
