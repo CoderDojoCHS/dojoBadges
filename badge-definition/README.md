@@ -34,34 +34,22 @@ The following is a running list of all the badges that the Charleston CoderDojo 
 ### Skill Based
 
 HTML
-    Create a FAS account,
-    `yaml <http://infrastructure.fedoraproject.org/infra/badges/rules/involvement.yml>`_,
-    `art`.
+
 
 CSS
-    Updated your GPG key with FAS
-    `yaml <http://infrastructure.fedoraproject.org/infra/badges/rules/fas-crypto-panda.yml>`_,
-    `art`.
+
 
 Javascript
-    You got a new koji certificate.
-    `yaml <http://infrastructure.fedoraproject.org/infra/badges/rules/fas-bona-fide.yml>`_,
-    `art`.
+
 
 NodeJS
-    You posted something to the Fedora Planet!
-    `yaml <http://infrastructure.fedoraproject.org/infra/badges/rules/planet-bloggin-it-01.yml>`_,
-    `art`.
+
 
 Arduino
-    You posted 5 blog posts to the Fedora Planet!
-    `yaml <http://infrastructure.fedoraproject.org/infra/badges/rules/planet-bloggin-it-02.yml>`_,
-    `art`.
+
 
 Presentation
-    You posted 10 blog posts to the Fedora Planet!
-    `yaml <http://infrastructure.fedoraproject.org/infra/badges/rules/planet-bloggin-it-03.yml>`_,
-    `art`.
+
 
 Git and Github
 
